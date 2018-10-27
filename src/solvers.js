@@ -17,7 +17,11 @@
 
 window.findNRooksSolution = function(n) {
   var solution = undefined; //fixme
-
+  //make calls to board.js
+  console.log(this.hasAnyRooksConflicts)
+  //detect conflicts in arrays
+    //if no conflict then its a solution
+  // return board solution
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
