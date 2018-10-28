@@ -3,9 +3,8 @@
 // The only portions you need to work on are the helper functions (below)
 
 (function() {
-
+  var cbpCount = 0;
   window.Board = Backbone.Model.extend({
-
     initialize: function (params) {
       if (_.isUndefined(params) || _.isNull(params)) {
         console.log('Good guess! But to use the Board() constructor, you must pass it an argument in one of the following formats:');
@@ -42,11 +41,14 @@
     },
 
     hasAnyQueenConflictsOn: function(rowIndex, colIndex) {
+      console.log(' this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex) --> ', this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex));
+      console.log(' rowIndex AND colIndex: --> ', rowIndex, ' ', colIndex, ' RESULT is colIndex - rowIndex')
       return (
         this.hasRowConflictAt(rowIndex) ||
         this.hasColConflictAt(colIndex) ||
         this.hasMajorDiagonalConflictAt(this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex)) ||
         this.hasMinorDiagonalConflictAt(this._getFirstRowColumnIndexForMinorDiagonalOn(rowIndex, colIndex))
+        
       );
     },
 
@@ -80,7 +82,7 @@
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
       var row = this.get(rowIndex);
-      console.log(row);
+      //console.log(row);
       //iterate over the array(row)
       var count = 0;
       for(var i = 0; i <row.length; i++){
@@ -143,22 +145,31 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
-
-    //[x , x . 1 , x]
-    //[0 , x . x , 1]
-    //[0 , 0 . x , x]
-    //[0 , 0 . 0 , x]
+    // VALUE AT INDEX MAP BELOW
+    // [0,   1,   0,  0]
+    // [0,   0,   0,  1] 
+    // [1,   0,   0,  0] 
+    // [0,   0,   1,  0] 
+    // INDEX MAP BELOW
+    //[ 0,   1,   2,  3]
+    //[-1,   0,   1,  2]
+    //[-2,  -1,   0,  1]
+    //[-3,  -2,  -1,  0]
+    
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) { //0
       var boardLength = this.get('n'); //4
+      console.log('this.get(\'n\') is ', this.get('n'));
       // var i = majorDiagonalColumnIndexAtFirstRow;
-      var row = 0;
+      var row = 0  //row needs to be rowIndex
       var count = 0;
-      console.log(' --> ', majorDiagonalColumnIndexAtFirstRow)
-      for (var i = majorDiagonalColumnIndexAtFirstRow; i < boardLength; i++) {//iterate over column
-       var rows = this.get(row);
-        console.log(rows, i)
-        if( i === 1){ //check specific index i
-
+      console.log(' RESULT is used as FOR LOOP length --> ', majorDiagonalColumnIndexAtFirstRow)
+      var mDCIAFRLength = majorDiagonalColumnIndexAtFirstRow; //Math.abs(majorDiagonalColumnIndexAtFirstRow);
+      for (var i = mDCIAFRLength; i < boardLength; i++) {//iterate over column
+        var rows = this.get(row);  // rows is an array of row 
+        console.log('rows is: ', rows, ' row is: --> ', row)
+        //console.log(rows, i)
+        // set a conditional to stop at 14
+        if( rows[i] === 1){ //check specific index i
           count++;
         } 
         row++;//move to next row
