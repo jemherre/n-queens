@@ -41,8 +41,10 @@
     },
 
     hasAnyQueenConflictsOn: function(rowIndex, colIndex) {
-      console.log(' this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex) --> ', this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex));
-      console.log(' rowIndex AND colIndex: --> ', rowIndex, ' ', colIndex, ' RESULT is colIndex - rowIndex')
+      // console.log(' this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex) --> ', this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex));
+      // console.log(' rowIndex AND colIndex: --> ', rowIndex, ' ', colIndex, ' RESULT is colIndex - rowIndex')
+      console.log(' this._getFirstRowColumnIndexForMinoDiagonalOn(rowIndex, colIndex) --> ', this._getFirstRowColumnIndexForMinorDiagonalOn(rowIndex, colIndex));
+      console.log(' rowIndex AND colIndex: --> ', rowIndex, ' ', colIndex, ' RESULT is colIndex + rowIndex')
       return (
         this.hasRowConflictAt(rowIndex) ||
         this.hasColConflictAt(colIndex) ||
@@ -141,56 +143,21 @@
 
 
 
-    // Major Diagonals - go from top-left to bottom-right
+     // Major Diagonals - go from top-right to bottom-left 
     // --------------------------------------------------------------
     //
-    // test if a specific major diagonal on this board contains a conflict
-    // VALUE AT INDEX MAP BELOW
-    // [0,   1,   0,  0]
-    // [0,   0,   0,  1] 
-    // [1,   0,   0,  0] 
-    // [0,   0,   1,  0] 
-    // INDEX MAP BELOW
-    //[ 0,   1,   2,  3]
-    //[-1,   0,   1,  2]
-    //[-2,  -1,   0,  1]
-    //[-3,  -2,  -1,  0]
-    
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) { //0
-      var boardLength = this.get('n'); //4
-      console.log('this.get(\'n\') is ', this.get('n'));
-      // var i = majorDiagonalColumnIndexAtFirstRow;
-      var row = 0  //row needs to be rowIndex
-      var count = 0;
-      console.log(' RESULT is used as FOR LOOP length --> ', majorDiagonalColumnIndexAtFirstRow)
-      var mDCIAFRLength = majorDiagonalColumnIndexAtFirstRow; //Math.abs(majorDiagonalColumnIndexAtFirstRow);
-      for (var i = mDCIAFRLength; i < boardLength; i++) {//iterate over column
-        var rows = this.get(row);  // rows is an array of row 
-        console.log('rows is: ', rows, ' row is: --> ', row)
-        //console.log(rows, i)
-        // set a conditional to stop at 14
-        if( rows[i] === 1){ //check specific index i
-          count++;
-        } 
-        row++;//move to next row
-      }
-      if(count > 1) return true;
+    // test if a specific minor diagonal on this board contains a conflict
+    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
       return false; // fixme
     },
 
-    // test if any major diagonals on this board contain conflicts
+    // test if any majordiagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      var boardLength = this.get('n');
-      for(var column = 0; column < boardLength; column++){
-        if(this.hasMajorDiagonalConflictAt(column)) return true;
-      }
-
-      return false; 
+      return false; // fixme
     },
 
 
-
-    // Minor Diagonals - go from top-right to bottom-left 
+     // Minor Diagonals - go from top-right to bottom-left 
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
