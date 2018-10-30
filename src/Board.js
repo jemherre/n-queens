@@ -114,7 +114,7 @@
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
       var boardLength = this.get('n');
-      //iiterate over column by 
+      //iiterate over column by
       var count = 0;
       for(var rowIndex = 0; rowIndex < boardLength; rowIndex++){
         var  row = this.get(rowIndex);
@@ -139,59 +139,124 @@
 
 
 
+
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
+    // VALUE AT INDEX MAP BELOW
+    // [0,   1,   0,  0]
+    // [0,   0,   0,  1]
+    // [1,   0,   0,  0]
+    // [0,   0,   1,  0]
+    // INDEX MAP BELOW
+    //[ 0,   1,   2,  3]
+    //[-1,   0,   1,  2]
+    //[-2,  -1,   0,  1]
+    //[-3,  -2,  -1,  0]
 
-    //[x , x . 1 , x]
-    //[0 , x . x , 1]
-    //[0 , 0 . x , x]
-    //[0 , 0 . 0 , x]
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) { //0
+    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) { //1
       var boardLength = this.get('n'); //4
+     // console.log('this.get(\'n\') is ', this.get('n'));
       // var i = majorDiagonalColumnIndexAtFirstRow;
-      var row = 0;
+      var row = 0  //row needs to be rowIndex
       var count = 0;
-      console.log(' --> ', majorDiagonalColumnIndexAtFirstRow)
-      for (var i = majorDiagonalColumnIndexAtFirstRow; i < boardLength; i++) {//iterate over column
-       var rows = this.get(row);
-        console.log(rows, i)
-        if( i === 1){ //check specific index i
-
+     // console.log(' RESULT is used as FOR LOOP length --> ', majorDiagonalColumnIndexAtFirstRow)
+      var mDCIAFRLength = majorDiagonalColumnIndexAtFirstRow;
+      //check mDCIAFRLength < 0
+      var col;
+      if (mDCIAFRLength < 0) {
+        //update row -> abs(mDCIAFRLength);
+        row = Math.abs(mDCIAFRLength);
+        col = 0; //handles negative
+      } else {
+        col = mDCIAFRLength; //assign when pos
+      }
+      for (; col < boardLength; col++) {//iterate over column
+       // console.log('col: ', col);
+        var rows = this.get(row);  // rows is an array of row
+      //  console.log('rows is: ', rows, ' row is: --> ', row)
+        //console.log(rows, i)
+        // set a conditional to stop at 14
+        if( rows[col] === 1){ //check specific index i
           count++;
-        } 
+        }
         row++;//move to next row
+        //if row < boardLength
+        if (row === boardLength) break;
+          //break
       }
       if(count > 1) return true;
       return false; // fixme
     },
-
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       var boardLength = this.get('n');
-      for(var column = 0; column < boardLength; column++){
+      var column = (boardLength - 1) * -1;
+      for(; column < boardLength; column++){
         if(this.hasMajorDiagonalConflictAt(column)) return true;
       }
 
-      return false; 
+      return false;
     },
 
 
-
-    // Minor Diagonals - go from top-right to bottom-left 
+    // INDEX MAP BELOW
+    //[0,  1,  2,  3,  4]
+    //[1,  2,  3,  4,  5]
+    //[2,  3,  4,  5,  6]
+    //[3,  4,  5,  6,  7]
+    //[4,  5,  6,  7,  8]
+ //colIndex + rowIndex
+    // Minor Diagonals - go from top-right to bottom-left
     // --------------------------------------------------------------
-    //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) { //3
+      //iterate row form last item to first item
+      console.log('this.get(\'n\') is ', this.get('n'));
+      var boardLength = this.get('n');
+      var row = 0;
+      var count = 0;//keeps track of our rooks and queens
+      var mDCIAFRLength = minorDiagonalColumnIndexAtFirstRow;
+      var col;
+
+      console.log(' RESULT is used as FOR LOOP length --> ', minorDiagonalColumnIndexAtFirstRow)
+      if (mDCIAFRLength > (boardLength - 1)) {
+        row = mDCIAFRLength - (boardLength - 1);
+        col = boardLength - 1;
+      } else {
+        col = mDCIAFRLength;//4
+      }
+      //we start at the end of row, and llast column
+      for( ;col >= 0; col--){
+        var rowArr = this.get(row);
+        console.log('rows is: ', rowArr, ' row is: --> ', row)
+        console.log(rowArr, col)
+        if(rowArr[col] == 1) count++; //check index
+        row++;//increment row
+        //check if row exceeded the board length
+        if(row === boardLength) break;
+      }
+
+      if (count > 1) return true;
       return false; // fixme
     },
-
+    //[0,  1,  2,  3,  4]     [0,  1,  2]
+    //[1,  2,  3,  4,  5]     [1,  2,  3]
+    //[2,  3,  4,  5,  6]     [2,  3,  4]
+    //[3,  4,  5,  6,  7]
+    //[4,  5,  6,  7,  8]
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+          // we have to iterate through all rows and columns
+      // iterate from index 0 to  (boardLength -1)*2
+      var lastIndex = (this.get('n') - 1) * 2;
+      for (var col = 0; col <= lastIndex; col++) {
+        if (this.hasMinorDiagonalConflictAt(col)) return true;
+      }
+      // call hasAnyMinorDiagonalConflictsAt for each item in loop
+      return false;
     }
-
     /*--------------------  End of Helper Functions  ---------------------*/
 
 
