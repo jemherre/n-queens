@@ -56,26 +56,38 @@ window.countNRooksSolutions = function(n) { //2
   // Method #2
   //CP Approach
   // create boards
-  var constraintBoard = new Board({'n': n}); // 2 x 2
   var rooksBoard = new Board({'n': n}); // 2 x 2
   //keep track of queens on board
+
+  // var constraintBoard = new Board({'n': n}); // 2 x 2
+
   var nRooks = 0;
-  //iterate through rows 0-n   /n--> 2
-  //position we are passing in // 0, 0
-  //step A: place the rook in a non constraint position and also save the location // 0, 0
+  //iterate through col 0-n   /n--> 2
+  //we want a fresh new board with our first location,create one
+  //declare var first position
+  // position we are passing in(row,col) // 0, 0  // 1, 1
+  // a value that has the position first used in a single solution
+  // step A: place the rook in a non constraint position and also save the location // 0, 0 // 1,1 
   //  toggle piece also in our rooks board // toggle position 0,0 to 1
-  //  increment rook counter //++1 rook
-  //step B: calculate and save constraints imposed (e.g. constraint is same row and column) [Constraints part]
+  //  increment rook counter //++2 rook
+  // step B: calculate and save constraints imposed (e.g. constraint is same row and column) [Constraints part]
+  // if the rook counter is the same size as n then we increment our solution counter // 1 
+  //untoggle pos
+  //  return first position
   //  toggleRowCol(row,col) -> toggle entire row & entire column in our constraint board // entire and column
-  //if the rook counter is the same size as n then we increment our solution counter // 1 
-  //  return from recursion functiion
-  //  calculate the next open position;now look at the next available spot 
-  //  iterating over constraint board and finding a position that does not have a one
-  //  board.get() -> row arrayr
-  //    iterate throgu
-  //pass in the position in our recursive function
-  //repeat steps A - B; 
-  //
+  //         base condition
+  // calculate the next open position;now look at the next available spot // open position is 1,1; avail spot 1,1
+  //  iterating over constraint board and finding a position that does not have a one // 1, 1
+  //  constraintBoard.get() -> row arrayr
+  //    iterate through
+  // pass in the position in our recursive function // pass in 1, 1 
+  // repeat steps A - B; 
+  //implement backtrack
+  //  look at constraint board
+  //untoggle cur
+  //  and change the previous location
+    
+  
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
