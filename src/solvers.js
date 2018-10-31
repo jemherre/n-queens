@@ -38,7 +38,7 @@ window.findNRooksSolution = function(n) { //3
     }
   };
 
-  checker(0,0);
+  checker(0, 0);
   //update solution from our board
   for (var i = 0; i < n; i++) {
     var rowArr = chessboard.get(i); //232 baord.js
