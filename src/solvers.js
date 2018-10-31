@@ -77,8 +77,6 @@ window.countNRooksSolutions = function(n) { //2
   //repeat steps A - B; 
   //
 
-
-
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
