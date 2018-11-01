@@ -43,8 +43,8 @@
     hasAnyQueenConflictsOn: function(rowIndex, colIndex) {
       // console.log(' this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex) --> ', this._getFirstRowColumnIndexForMajorDiagonalOn(rowIndex, colIndex));
       // console.log(' rowIndex AND colIndex: --> ', rowIndex, ' ', colIndex, ' RESULT is colIndex - rowIndex')
-      console.log(' this._getFirstRowColumnIndexForMinoDiagonalOn(rowIndex, colIndex) --> ', this._getFirstRowColumnIndexForMinorDiagonalOn(rowIndex, colIndex));
-      console.log(' rowIndex AND colIndex: --> ', rowIndex, ' ', colIndex, ' RESULT is colIndex + rowIndex');
+      //console.log(' this._getFirstRowColumnIndexForMinoDiagonalOn(rowIndex, colIndex) --> ', this._getFirstRowColumnIndexForMinorDiagonalOn(rowIndex, colIndex));
+      //console.log(' rowIndex AND colIndex: --> ', rowIndex, ' ', colIndex, ' RESULT is colIndex + rowIndex');
       return (
         this.hasRowConflictAt(rowIndex) ||
         this.hasColConflictAt(colIndex) ||
@@ -214,14 +214,14 @@
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) { //3
       //iterate row form last item to first item
-      console.log('this.get(\'n\') is ', this.get('n'));
+      // console.log('this.get(\'n\') is ', this.get('n'));
       var boardLength = this.get('n');
       var row = 0;
       var count = 0;//keeps track of our rooks and queens
       var mDCIAFRLength = minorDiagonalColumnIndexAtFirstRow;
       var col;
 
-      console.log(' RESULT is used as FOR LOOP length --> ', minorDiagonalColumnIndexAtFirstRow);
+      // console.log(' RESULT is used as FOR LOOP length --> ', minorDiagonalColumnIndexAtFirstRow);
       if (mDCIAFRLength > (boardLength - 1)) {
         row = mDCIAFRLength - (boardLength - 1);
         col = boardLength - 1;
@@ -231,8 +231,8 @@
       //we start at the end of row, and llast column
       for ( ;col >= 0; col--) {
         var rowArr = this.get(row);
-        console.log('rows is: ', rowArr, ' row is: --> ', row);
-        console.log(rowArr, col);
+        // console.log('rows is: ', rowArr, ' row is: --> ', row);
+        // console.log(rowArr, col);
         if (rowArr[col] === 1) { count++; } //check index
         row++;//increment row
         //check if row exceeded the board length

@@ -51,43 +51,78 @@ window.findNRooksSolution = function(n) { //3
 
 //SOLUTION:  There are N queens placed on an n  x n board 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
-window.countNRooksSolutions = function(n) { //2
+window.countNRooksSolutions = function(n) { //1
   var solutionCount = 0;
   // Method #2
   //CP Approach
   // create boards
-  var rooksBoard = new Board({'n': n}); // 2 x 2
+  //var rooksBoard = new Board({'n': n});  
   //keep track of queens on board
+  // var constraintBoard = new Board({'n': n}); 
 
-  // var constraintBoard = new Board({'n': n}); // 2 x 2
-
-  var nRooks = 0;
-  //iterate through col 0-n   /n--> 2
-  //we want a fresh new board with our first location,create one
-  //declare var first position
-  // position we are passing in(row,col) // 0, 0  // 1, 1
-  // a value that has the position first used in a single solution
-  // step A: place the rook in a non constraint position and also save the location // 0, 0 // 1,1 
-  //  toggle piece also in our rooks board // toggle position 0,0 to 1
-  //  increment rook counter //++2 rook
-  // step B: calculate and save constraints imposed (e.g. constraint is same row and column) [Constraints part]
-  // if the rook counter is the same size as n then we increment our solution counter // 1 
-  //untoggle pos
-  //  return first position
-  //  toggleRowCol(row,col) -> toggle entire row & entire column in our constraint board // entire and column
-  //         base condition
-  // calculate the next open position;now look at the next available spot // open position is 1,1; avail spot 1,1
-  //  iterating over constraint board and finding a position that does not have a one // 1, 1
-  //  constraintBoard.get() -> row arrayr
-  //    iterate through
-  // pass in the position in our recursive function // pass in 1, 1 
-  // repeat steps A - B; 
-  //implement backtrack
-  //  look at constraint board
-  //untoggle cur
-  //  and change the previous location
-    
   
+  // var rowIndex = 0;
+
+  var recurse = function (row, col) {
+    // a value that has the position first used in a single solution
+    // step A: place the rook in a non constraint position and also save the location
+    //  toggle piece also in our rooks board // toggle position 0,0 to 1
+    rooksBoard.togglePiece(row, col);
+    // console.log("row=",row," col=",col);
+    // console.log('value of rooksBoard.get(row) in recurse: ',rooksBoard.get(row));  
+    //  increment rook counter //++2 rook
+    nRooks++;
+    // step B: calculate and save constraints imposed (e.g. constraint is same row and column) [Constraints part]
+    // if the rook counter is the same size as n then we increment our solution counter 
+    if (nRooks === n) {
+      solutionCount++;
+      return;
+    }
+    //untoggle pos
+    //  return first position
+    // iterate through the row and compare each index to see if there is a conflict and if we reach 
+    //   the end of the row without placing a rook, a conflict exists for all positions in row, that
+    //   means our previously placed rook is not a valid position
+    //   --> conflict is defined as using method/function hasColumnConflictAt:
+    var nextRow = rooksBoard.get(++row);
+
+    for (var colPosition = 0; colPosition < nextRow.length; colPosition++) {
+      rooksBoard.togglePiece(row, colPosition); //toggle on
+      if (!rooksBoard.hasColConflictAt(colPosition)) { //false- no conflicts
+        rooksBoard.togglePiece(row, colPosition);//toggle off before recurs
+        recurse(row, colPosition); //row - 1 , validPos -  1  <-----
+        nRooks--;
+      } 
+      rooksBoard.togglePiece(row, colPosition);//toggle off
+    }
+    // pass in the position in our recursive function   
+    // repeat steps A - B; 
+    // if (validPos !== -1) {
+    //   recurse(row, validPos);
+    //   //
+    //}
+    return;
+  };
+
+  //0 [1, 0, 0]
+  //1 [0, 0, 1] 
+  //2 [0, 1, 0]
+
+  //iterate through col 0-n   /n--> 2
+  for (var col = 0; col < n; col++) { //col - 1
+    var rooksBoard = new Board({ 'n': n });
+    var nRooks = 0;
+    //we want a fresh new board with our first location, create one
+    //declare var first position
+    //var firstPosition;
+    // console.log("col: --> ", col)
+    recurse(0, col);//<--- (0 , 1)
+    // position we are passing in(row,col)
+    //implement backtrack
+    //  look at constraint board
+    //untoggle cur
+    //  and change the previous location
+  }
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
