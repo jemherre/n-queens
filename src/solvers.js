@@ -49,18 +49,18 @@ window.findNRooksSolution = function(n) { //3
   return solution;
 };
 
-//SOLUTION:  There are N queens placed on an n  x n board 
+//SOLUTION:  There are N queens placed on an n  x n board
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) { //1
   var solutionCount = 0;
   // Method #2
   //CP Approach
   // create boards
-  //var rooksBoard = new Board({'n': n});  
+  //var rooksBoard = new Board({'n': n});
   //keep track of queens on board
-  // var constraintBoard = new Board({'n': n}); 
+  // var constraintBoard = new Board({'n': n});
 
-  
+
   // var rowIndex = 0;
 
   var recurse = function (row, col) {
@@ -69,18 +69,18 @@ window.countNRooksSolutions = function(n) { //1
     //  toggle piece also in our rooks board // toggle position 0,0 to 1
     rooksBoard.togglePiece(row, col);
     // console.log("row=",row," col=",col);
-    // console.log('value of rooksBoard.get(row) in recurse: ',rooksBoard.get(row));  
+    // console.log('value of rooksBoard.get(row) in recurse: ',rooksBoard.get(row));
     //  increment rook counter //++2 rook
     nRooks++;
     // step B: calculate and save constraints imposed (e.g. constraint is same row and column) [Constraints part]
-    // if the rook counter is the same size as n then we increment our solution counter 
+    // if the rook counter is the same size as n then we increment our solution counter
     if (nRooks === n) {
       solutionCount++;
       return;
     }
     //untoggle pos
     //  return first position
-    // iterate through the row and compare each index to see if there is a conflict and if we reach 
+    // iterate through the row and compare each index to see if there is a conflict and if we reach
     //   the end of the row without placing a rook, a conflict exists for all positions in row, that
     //   means our previously placed rook is not a valid position
     //   --> conflict is defined as using method/function hasColumnConflictAt:
@@ -92,11 +92,11 @@ window.countNRooksSolutions = function(n) { //1
         rooksBoard.togglePiece(row, colPosition);//toggle off before recurs
         recurse(row, colPosition); //row - 1 , validPos -  1  <-----
         nRooks--;
-      } 
+      }
       rooksBoard.togglePiece(row, colPosition);//toggle off
     }
-    // pass in the position in our recursive function   
-    // repeat steps A - B; 
+    // pass in the position in our recursive function
+    // repeat steps A - B;
     // if (validPos !== -1) {
     //   recurse(row, validPos);
     //   //
@@ -105,7 +105,7 @@ window.countNRooksSolutions = function(n) { //1
   };
 
   //0 [1, 0, 0]
-  //1 [0, 0, 1] 
+  //1 [0, 0, 1]
   //2 [0, 1, 0]
 
   //iterate through col 0-n   /n--> 2
@@ -132,13 +132,65 @@ window.countNRooksSolutions = function(n) { //1
 window.findNQueensSolution = function(n) {
   var solution = undefined; //fixme
 
+
+
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
 
+//[1 0 0 0]
+//[0 0 0 0]
+//[0 0 0 0]
+//[0 0 0 0]
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0; //fixme
+    //recursion func (row, col)
+  var findSolutions = function(row,col) {
+    //assuming that there is no row conflict
+    //place A queen on row, col --> toggle queen on
+    queensBoard.togglePiece(row,col);
+    //increment our queen counter
+    queenCounter++;
+    //when placing nth queen and it equals to our n, then it is a solution then return
+    if(queenCounter === n){
+      solutionCount++;
+      return;
+    }
+    //increment row
+    row++;
+    //look at each position in the "current" row (row,i){ //(1,2)
+    for(var colPosition = 0; colPosition < n; colPosition++){
+      //toggle queen to check
+      queensBoard.togglePiece(row,colPosition);
+      //check for conflict A queen - col, mino, major
+       //when true -- exist a conflict
+      if(queensBoard.hasAnyQueenConflictsOn(row,colPosition)){
+          //untoggle  check queen
+          queensBoard.togglePiece(row,colPosition);
+      } else{//when false -- valid position
+          //call recursion passing (row, i)
+          queensBoard.togglePiece(row,colPosition);
+          findSolutions(row,colPosition);
+          //Backtrack
+          queensBoard.togglePiece(row,colPosition);//remove queen for back track
+          queenCounter--;//update queens
+      }
+    }
+    return;
+  };
+
+  //place first queen in (0,0) -> (0,1)--> ...(0,n)
+  for(var colPosition = 0; colPosition < n; colPosition++){
+    //create queen board instance
+    var queensBoard = new Board({'n':n});
+    //create queen counter and it sets to zero
+    var queenCounter = 0;
+    //find all other possible solutions
+    //call our recursion (0, col)
+    findSolutions(0,colPosition);
+  }
+
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
