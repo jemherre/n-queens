@@ -59,6 +59,7 @@ describe('solvers', function() {
         }, 0);
 
         expect(numPieces).to.equal(0);
+        console.log("TEST: ",solutionBoard.get('n'), " TESTS: ", n);
         expect(solutionBoard.get('n')).to.equal(n);
       });
     });

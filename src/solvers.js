@@ -60,7 +60,6 @@ window.countNRooksSolutions = function(n) { //1
   //keep track of queens on board
   // var constraintBoard = new Board({'n': n});
 
-
   // var rowIndex = 0;
 
   var recurse = function (row, col) {
@@ -130,9 +129,70 @@ window.countNRooksSolutions = function(n) { //1
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = [];
+  var solutionCount = 0;
 
+  if(n === 2){
+    solution = [[0, 0],[0 , 0]];
+    return solution;
+  }else if(n===3){
+    solution = [[0, 0, 0],[0 , 0, 0],[0, 0, 0]];
+    return solution;
+  }
 
+  var findOneSolution = function(row,col) { //0 ,0
+    //assuming that there is no row conflict
+    //place A queen on row, col --> toggle queen on
+    queensBoard.togglePiece(row,col);
+    //increment our queen counter
+    queenCounter++;
+    //when placing nth queen and it equals to our n, then it is a solution then return
+    if(queenCounter === n){
+      solutionCount++;
+      console.log("SOLUTION FOUND")
+      return true;
+    }
+    //increment row
+    row++;
+    //look at each position in the "current" row (row,i){ //(1,2)
+    for(var colPosition = 0; colPosition < n; colPosition++){
+      //toggle queen to check
+      queensBoard.togglePiece(row,colPosition);
+      //check for conflict A queen - col, mino, major
+       //when true -- exist a conflict
+      if(queensBoard.hasAnyQueenConflictsOn(row,colPosition)){
+          //untoggle  check queen
+          queensBoard.togglePiece(row,colPosition);
+      } else{//when false -- valid position
+          //call recursion passing (row, i)
+          queensBoard.togglePiece(row,colPosition);
+          if(findOneSolution(row,colPosition)){
+              solution.push(queensBoard.get(row));
+              return true;
+          } else {
+          //Backtrack
+          queensBoard.togglePiece(row,colPosition);//remove queen for back track
+          queenCounter--;//update queens
+          }
+      }
+    }
+    return false;
+  };
+
+  //place first queen in (0,0) -> (0,1)--> ...(0,n)
+  for(var colPosition = 0; colPosition < n; colPosition++){
+    //create queen board instance
+    var queensBoard = new Board({'n':n});
+    //create queen counter and it sets to zero
+    var queenCounter = 0;
+    //find all other possible solutions
+    //call our recursion (0, col)
+    if(findOneSolution(0,colPosition)) {
+      solution.push(queensBoard.get(0));
+      break;
+    }
+  }
+  //if solution count is zero
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
