@@ -132,62 +132,62 @@ window.findNQueensSolution = function(n) {
   var solution = [];
   var solutionCount = 0;
 
-  if(n === 2){
-    solution = [[0, 0],[0 , 0]];
+  if (n === 2) {
+    solution = [[0, 0], [0, 0]];
     return solution;
-  }else if(n===3){
-    solution = [[0, 0, 0],[0 , 0, 0],[0, 0, 0]];
+  } else if (n === 3) {
+    solution = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
     return solution;
   }
 
-  var findOneSolution = function(row,col) { //0 ,0
+  var findOneSolution = function(row, col) { //0 ,0
     //assuming that there is no row conflict
     //place A queen on row, col --> toggle queen on
-    queensBoard.togglePiece(row,col);
+    queensBoard.togglePiece(row, col);
     //increment our queen counter
     queenCounter++;
     //when placing nth queen and it equals to our n, then it is a solution then return
-    if(queenCounter === n){
+    if (queenCounter === n) {
       solutionCount++;
-      console.log("SOLUTION FOUND")
+      console.log('SOLUTION FOUND');
       return true;
     }
     //increment row
     row++;
     //look at each position in the "current" row (row,i){ //(1,2)
-    for(var colPosition = 0; colPosition < n; colPosition++){
+    for (var colPosition = 0; colPosition < n; colPosition++) {
       //toggle queen to check
-      queensBoard.togglePiece(row,colPosition);
+      queensBoard.togglePiece(row, colPosition);
       //check for conflict A queen - col, mino, major
-       //when true -- exist a conflict
-      if(queensBoard.hasAnyQueenConflictsOn(row,colPosition)){
-          //untoggle  check queen
-          queensBoard.togglePiece(row,colPosition);
-      } else{//when false -- valid position
-          //call recursion passing (row, i)
-          queensBoard.togglePiece(row,colPosition);
-          if(findOneSolution(row,colPosition)){
-              solution.push(queensBoard.get(row));
-              return true;
-          } else {
+      //when true -- exist a conflict
+      if (queensBoard.hasAnyQueenConflictsOn(row, colPosition)) {
+        //untoggle  check queen
+        queensBoard.togglePiece(row, colPosition);
+      } else { //when false -- valid position
+        //call recursion passing (row, i)
+        queensBoard.togglePiece(row, colPosition);
+        if (findOneSolution(row, colPosition)) {
+          solution.push(queensBoard.get(row));
+          return true;
+        } else {
           //Backtrack
-          queensBoard.togglePiece(row,colPosition);//remove queen for back track
+          queensBoard.togglePiece(row, colPosition);//remove queen for back track
           queenCounter--;//update queens
-          }
+        }
       }
     }
     return false;
   };
 
   //place first queen in (0,0) -> (0,1)--> ...(0,n)
-  for(var colPosition = 0; colPosition < n; colPosition++){
+  for (var colPosition = 0; colPosition < n; colPosition++) {
     //create queen board instance
-    var queensBoard = new Board({'n':n});
+    var queensBoard = new Board({'n': n});
     //create queen counter and it sets to zero
     var queenCounter = 0;
     //find all other possible solutions
     //call our recursion (0, col)
-    if(findOneSolution(0,colPosition)) {
+    if (findOneSolution(0, colPosition)) {
       solution.push(queensBoard.get(0));
       break;
     }
@@ -205,50 +205,50 @@ window.findNQueensSolution = function(n) {
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
   var solutionCount = 0; //fixme
-    //recursion func (row, col)
-  var findSolutions = function(row,col) {
+  //recursion func (row, col)
+  var findSolutions = function(row, col) {
     //assuming that there is no row conflict
     //place A queen on row, col --> toggle queen on
-    queensBoard.togglePiece(row,col);
+    queensBoard.togglePiece(row, col);
     //increment our queen counter
     queenCounter++;
     //when placing nth queen and it equals to our n, then it is a solution then return
-    if(queenCounter === n){
+    if (queenCounter === n) {
       solutionCount++;
       return;
     }
     //increment row
     row++;
     //look at each position in the "current" row (row,i){ //(1,2)
-    for(var colPosition = 0; colPosition < n; colPosition++){
+    for (var colPosition = 0; colPosition < n; colPosition++) {
       //toggle queen to check
-      queensBoard.togglePiece(row,colPosition);
+      queensBoard.togglePiece(row, colPosition);
       //check for conflict A queen - col, mino, major
-       //when true -- exist a conflict
-      if(queensBoard.hasAnyQueenConflictsOn(row,colPosition)){
-          //untoggle  check queen
-          queensBoard.togglePiece(row,colPosition);
-      } else{//when false -- valid position
-          //call recursion passing (row, i)
-          queensBoard.togglePiece(row,colPosition);
-          findSolutions(row,colPosition);
-          //Backtrack
-          queensBoard.togglePiece(row,colPosition);//remove queen for back track
-          queenCounter--;//update queens
+      //when true -- exist a conflict
+      if (queensBoard.hasAnyQueenConflictsOn(row, colPosition)) {
+        //untoggle  check queen
+        queensBoard.togglePiece(row, colPosition);
+      } else { //when false -- valid position
+        //call recursion passing (row, i)
+        queensBoard.togglePiece(row, colPosition);
+        findSolutions(row, colPosition);
+        //Backtrack
+        queensBoard.togglePiece(row, colPosition);//remove queen for back track
+        queenCounter--;//update queens
       }
     }
     return;
   };
 
   //place first queen in (0,0) -> (0,1)--> ...(0,n)
-  for(var colPosition = 0; colPosition < n; colPosition++){
+  for (var colPosition = 0; colPosition < n; colPosition++) {
     //create queen board instance
-    var queensBoard = new Board({'n':n});
+    var queensBoard = new Board({'n': n});
     //create queen counter and it sets to zero
     var queenCounter = 0;
     //find all other possible solutions
     //call our recursion (0, col)
-    findSolutions(0,colPosition);
+    findSolutions(0, colPosition);
   }
 
 
